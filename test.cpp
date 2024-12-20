@@ -1,4 +1,8 @@
 #include <iostream>
+#include <stdlib.h>
+#include <string>
+#include <conio.h>
+
 using namespace std;
 
 void GridRows(char a,char b,char c){
@@ -41,7 +45,10 @@ void GridRows(char a,char b,char c){
 void lineSeg(){
 
     for (int i = 0; i < 25; i++){
-        cout << "-";
+        if (i == 8 || i == 16)
+            cout << "+";
+        else
+             cout << "-";
     }
     cout << endl;
 
@@ -56,16 +63,57 @@ int main(){
         SLOT[i] = ' ';
     }
 
+    bool gamestate = true;
+    int i = 0;
+    int PlayerTurn = 1;
+    int select;
 
-    //Main game drawing
-    GridRows(SLOT[0],SLOT[1],SLOT[2]);
-    lineSeg();
-    GridRows(SLOT[3],SLOT[4],SLOT[5]);
-    lineSeg();
-    GridRows(SLOT[6],SLOT[7],SLOT[8]);
+    //Main game loop
+    do{
+
+        // Draws grid and elements
+        GridRows(SLOT[0],SLOT[1],SLOT[2]);
+        lineSeg();
+        GridRows(SLOT[3],SLOT[4],SLOT[5]);
+        lineSeg();
+        GridRows(SLOT[6],SLOT[7],SLOT[8]);
 
 
+        cout << endl;
 
+        //Ask for user input
+         if (i == 9){
+            cout << "Press enter to continue: ";
+            getch();
+
+            gamestate = false;
+        }
+        else if (PlayerTurn == 1){
+
+            cout << "Player X's turn (Select 1 - 9): ";
+            cin >> select;
+
+            SLOT[select - 1] = 'x';
+
+            PlayerTurn = 2;
+        }
+        else{
+
+            cout << "Player O's turn (Select 1 - 9): ";
+            cin >> select;
+
+            SLOT[select - 1] = 'o';
+
+            PlayerTurn = 1;
+        }
+
+        system("cls");
+
+        i++;
+
+    }while(gamestate == true);
+
+    return 0;
 
 }
 
