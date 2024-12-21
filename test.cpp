@@ -2,23 +2,26 @@
 #include <stdlib.h>
 #include <string>
 #include <conio.h>
-#include <windows.h>
 
 using namespace std;
 
 //GLOBAL VARIABLES
-const int SLOTSIZE = 9;
-string SLOT[SLOTSIZE]; // 9 slots including 0
-int ACTIVESLOT[SLOTSIZE] = {0};
+const int SLOTSIZE = 9, PLAYERS = 2;
+char DRAW_SLOT[SLOTSIZE]; // 9 slots including 0
+int SLOT_X[SLOTSIZE] = {0};
+int SLOT_O[SLOTSIZE] = {0};
+string username[PLAYERS];
+char rematch;
+
 
 void Header(string username[], string symbol[]){
     cout<<"+----------------------------------+\n";
-    cout<<" \t🙞 Tic-Tac-Toe!🙜\n";
+    cout<<" \t     Tic-Tac-Toe\n";
     cout<<"+----------------------------------+\n\n";
-    cout<<" "<<username[0]<<symbol[0]<<"\t\t"<<username[1]<<symbol[1]<<endl<<endl;
+    cout<<" "<<username[0]<<" {"<<symbol[0]<<"}"<<"\t\t"<<username[1]<<" {"<<symbol[1]<<"}"<<endl<<endl;
 }
 
-void GridRows(string a,string b,string c){
+void GridRows(char a,char b,char c){
     //Row 1
 
     for (int row = 1; row <= 3; row++){
@@ -26,7 +29,7 @@ void GridRows(string a,string b,string c){
         for (int column = 1; column < 10; column++){
 
 
-            // Middle row holes
+            // row middle holes
             if (row == 2 && column == 2){
                 cout << " " << a;
             }
@@ -46,7 +49,6 @@ void GridRows(string a,string b,string c){
                 cout << " " << "|";
             }
 
-
         }
         cout << endl;
     }
@@ -58,17 +60,22 @@ void lineSeg(){
         if (i == 8 || i == 16)
             cout << "+";
         else
-            cout << "-";
+             cout << "-";
     }
     cout << endl;
 
 }
 
-bool isMoveValid(int input, string turn){
+bool isMoveValid(int input, char turn){
 
-    if (ACTIVESLOT[input] == 0){
-        SLOT[input] = turn;
-        ACTIVESLOT[input] = 1;
+    if (SLOT_X[input] == 0 && SLOT_O[input] != 1 && turn == 'x'){
+        DRAW_SLOT[input] = turn;
+        SLOT_X[input] = 1;
+        return true;
+    }
+    else if (SLOT_O[input] == 0 && SLOT_X[input] != 1 && turn == 'o'){
+        DRAW_SLOT[input] = turn;
+        SLOT_O[input] = 1;
         return true;
     }
     else
@@ -77,23 +84,79 @@ bool isMoveValid(int input, string turn){
 }
 
 void DrawGrid(){
-    GridRows(SLOT[1],SLOT[2],SLOT[3]);
+    GridRows(DRAW_SLOT[1],DRAW_SLOT[2],DRAW_SLOT[3]);
     lineSeg();
-    GridRows(SLOT[4],SLOT[5],SLOT[6]);
+    GridRows(DRAW_SLOT[4],DRAW_SLOT[5],DRAW_SLOT[6]);
     lineSeg();
-    GridRows(SLOT[7],SLOT[8],SLOT[9]);
+    GridRows(DRAW_SLOT[7],DRAW_SLOT[8],DRAW_SLOT[9]);
+}
+
+bool CheckWinCond(int ary[]){
+
+    if (
+        /*
+        1 0 0
+        0 1 0
+        0 0 1
+        */
+        (ary[1] == 1 && ary[5] == 1 && ary[9] == 1) ||
+        /*
+        0 0 1
+        0 1 0
+        1 0 0
+        */
+        (ary[3] == 1 && ary[5] == 1 && ary[7] == 1) ||
+        /*
+        1 1 1
+        0 0 0
+        0 0 0
+        */
+        (ary[1] == 1 && ary[2] == 1 && ary[3] == 1) ||
+        /*
+        0 0 0
+        1 1 1
+        0 0 0
+        */
+        (ary[4] == 1 && ary[5] == 1 && ary[6] == 1) ||
+        /*
+        0 0 0
+        0 0 0
+        1 1 1
+        */
+        (ary[7] == 1 && ary[8] == 1 && ary[9] == 1) ||
+        /*
+        1 0 0
+        1 0 0
+        1 0 0
+        */
+        (ary[1] == 1 && ary[4] == 1 && ary[7] == 1) ||
+        /*
+        0 1 0
+        0 1 0
+        0 1 0
+        */
+        (ary[2] == 1 && ary[5] == 1 && ary[8] == 1) ||
+        /*
+        0 0 1
+        0 0 1
+        0 0 1
+        */
+        (ary[3] == 1 && ary[6] == 1 && ary[9] == 1)
+        ){
+            return true;
+        }
+    else
+        return false;
+
 }
 
 int main(){
 
-    SetConsoleOutputCP(CP_UTF8);
-    int SLOTSIZE = 9, PLAYERS=2, p=0;
-    string username[PLAYERS]; // 9 slots including 0
-    char confirm,rematch;
-
     cout<<"+-------------------------------------------------+\n";
-    cout<<" Hello, user! Welcome to \xE2\x96\xB6Tic-Tac-Toe!\xE2\x97\x80 ヾ(≧▽≦*)o\n";
+    cout<<" Hello, user! Welcome to >>>Tic-Tac-Toe<<< ! OvO\n";
 
+    int p=0;
+    char confirm;
     while(p<PLAYERS){
         cout<<"+-------------------------------------------------+\n";
         cout<<"\n What's Player "<<p+1<<"'s name? \n ";
@@ -108,7 +171,7 @@ int main(){
         else if ((confirm == 'N')||(confirm == 'n')){}
         else{
             while ((confirm != 'Y')&&(confirm != 'y')&&(confirm != 'N')&&(confirm != 'n')){
-                cout<<"Invalid input. Please try again.";
+                cout<<"Invalid input. Please try again. ;-;";
                 cout<<" Your name is "<<username[p]<<"? (Y/N)\n ";
                 cin>>confirm;
             }
@@ -124,29 +187,30 @@ int main(){
         string symbol[PLAYERS];
 
 
-        int randomNum = rand() % 2; // Grape(1)/Cherry(0) for Player 1
+        int randomNum = rand() % 2; // X(1)/O(0) for Player 1
         if (randomNum==1){
-            symbol[0] = "\xF0\x9F\x8D\x87"; //Player 1: Grape as X
+            symbol[0] = 'X'; //Player 1: X
         }
         else if (randomNum==0){
-            symbol[0] = "\xF0\x9F\x8D\x92"; //Player 1: Cherry as O
+            symbol[0] = 'O'; //Player 1: O
         }
         if (1-randomNum==1){
-            symbol[1] = "\xF0\x9F\x8D\x87"; //Player 2: Grape as X
+            symbol[1] = 'X'; //Player 2: X
         }
         else if (1-randomNum==0){
-            symbol[1] = "\xF0\x9F\x8D\x92"; //Player 2: Cherry as O
+            symbol[1] = 'O'; //Player 2: O
         }
 
 
-    for (int i = 0; i < SLOTSIZE; i++){
-        SLOT[i] = " ";
+    for (int i = 1; i <= SLOTSIZE; i++){
+        DRAW_SLOT[i] = ' ';
     }
 
     bool gamestate = true;
     int i = 0;
     int PlayerTurn = 1;
     int select;
+
 
     //Main game loop
     do{
@@ -156,12 +220,27 @@ int main(){
         // Draws grid and elements
         DrawGrid();
 
-
         cout << endl;
 
         //Ask for user input
-         if (i == 9){
-            cout << "Press enter to continue: ";
+
+
+        if (i == 9 || CheckWinCond(SLOT_X) == true || CheckWinCond(SLOT_O) == true){
+            if (CheckWinCond(SLOT_X)){
+                cout<<"\n+----------------------------------+\n";
+                cout << " YAY! X won! *v*";
+                cout<<"\n+----------------------------------+\n";
+            }
+            else if (CheckWinCond(SLOT_O)){
+                cout<<"\n+----------------------------------+\n";
+                cout << " WOW! O won! *v*";
+                cout<<"\n+----------------------------------+\n";
+            }
+            else{
+                cout<<"\n+----------------------------------+\n";
+                cout << "IT'S A DRAW!!! >:O";
+                cout<<"\n+----------------------------------+\n";
+            }
             getch();
 
             gamestate = false;
@@ -169,34 +248,37 @@ int main(){
         else if (PlayerTurn == 1){
 
             do{
-                cout << "Player \xF0\x9F\x8D\x87's turn (Select 1 - 9): ";
+                cout<<"\n+----------------------------------+\n";
+                cout << " Player X's turn (Select 1 - 9): ";
                 cin >> select;
 
-                if (isMoveValid(select, "\xF0\x9F\x8D\x87")){ // Checks if slot is occupied
+                if (isMoveValid(select, 'x')){ // Checks if slot is occupied
                     break;
                 }
                 else
                     system("cls");
+                    DrawGrid();
+                    cout << "\n Uh-oh! That slot is occupied. (._.;)" << endl;
 
-                DrawGrid();
-                cout << "Uh-oh! That slot occupied! (._. ;)" << endl;
 
             }while(true);
 
             PlayerTurn = 2;
         }
         else{
+
             do{
-                cout << "Player \xF0\x9F\x8D\x92's turn (Select 1 - 9): ";
+                cout<<"\n+----------------------------------+\n\n";
+                cout << " Player O's turn (Select 1 - 9): ";
                 cin >> select;
 
-                if (isMoveValid(select, "\xF0\x9F\x8D\x92")){
+                if (isMoveValid(select, 'o')){
                     break;
                 }
                 else
                     system("cls");
                     DrawGrid();
-                    cout << "Uh-oh! That slot occupied! (._. ;)" << endl;
+                    cout << "\n Uh-oh! That slot is occupied. (._.;)" << endl;
 
 
             }while(true);
@@ -208,16 +290,17 @@ int main(){
 
         i++;
 
+
+
+
     }while(gamestate == true);
 
-    cout << "\n Congratulations, "<<username[0]<<" wins! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧";
-
-        cout << "\n Would you like to have a rematch?\n ";
+    cout << "\n Would you like to have a rematch?\n ";
         cin>>rematch;
 
         if (rematch=='N'||rematch=='n'){
             cout<<"\n+-------------------------------------------------+\n";
-            cout<<" Come back when you want to play again! o(*^▽^*)┛";
+            cout<<" Come back when you want to play again! :D";
             cout<<"\n+-------------------------------------------------+\n";
         }
         else if ((rematch != 'Y')&&(rematch != 'y')&&(rematch != 'N')&&(rematch != 'n')){
@@ -227,12 +310,13 @@ int main(){
                 cin>>rematch;
                 if ((rematch == 'N')||(rematch == 'n')){
                     cout<<"\n+-------------------------------------------------+\n";
-                    cout<<" Come back when you want to play again! o(*^▽^*)┛";
+                    cout<<" Come back when you want to play again! :D";
                     cout<<"\n+-------------------------------------------------+\n";
                 }
             }while ((rematch != 'Y')&&(rematch != 'y')&&(rematch != 'N')&&(rematch != 'n'));
         }
     }while (rematch=='Y'||rematch=='y');
+
 
 
     return 0;
