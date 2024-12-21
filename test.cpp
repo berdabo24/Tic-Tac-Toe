@@ -11,7 +11,7 @@ char DRAW_SLOT[SLOTSIZE]; // 9 slots including 0
 int SLOT_X[SLOTSIZE] = {0};
 int SLOT_O[SLOTSIZE] = {0};
 string username[PLAYERS];
-char rematch;
+char symbol[PLAYERS], rematch;
 
 
 void Header(string username[], char symbol[]){
@@ -150,12 +150,35 @@ bool CheckWinCond(int ary[]){
 
 }
 
+bool InputCheck(int inp, char turn){ // Checks if user input is valid
+
+    if (inp < 1 || inp > 9 || cin.fail()){ // checks if the user input is out of range or wrong datatype
+        cin.clear();
+        cin.ignore();
+        system("cls");
+        Header(username,symbol);
+        DrawGrid();
+        cout << "\n WEE WOO OUT OF RANGE!!! >:/" << endl;
+        return true;
+    }
+    else if (isMoveValid(inp, turn)){
+        return false;
+    }
+    else{
+        system("cls");
+        Header(username,symbol);
+        DrawGrid();
+        cout << "\n Uh-oh! That slot is occupied. (._.;)" << endl;
+        return true;
+    }
+
+}
+
 int main(){
 
     cout<<"+-------------------------------------------------+\n";
     cout<<" Hello, user! Welcome to >>>Tic-Tac-Toe<<< ! OvO\n";
 
-    //Enter username of players
     int p=0;
     char confirm;
     while(p<PLAYERS){
@@ -172,8 +195,8 @@ int main(){
         else if ((confirm == 'N')||(confirm == 'n')){}
         else{
             while ((confirm != 'Y')&&(confirm != 'y')&&(confirm != 'N')&&(confirm != 'n')){
-                cout<<"\n Invalid input. Please try again. ;-;\n";
-                cout<<" Your name is "<<username[p]<<"? (Y/N)\n ";
+                cout<<"Invalid input. Please try again. ;-;";
+                cout<<"\n Your name is "<<username[p]<<"? (Y/N)\n ";
                 cin>>confirm;
             }
             if ((confirm == 'Y')||(confirm == 'y')){
@@ -185,8 +208,6 @@ int main(){
 
     do{
         system("cls");
-        char symbol[PLAYERS];
-
 
         int randomNum = rand() % 2; // X(1)/O(0) for Player 1
         if (randomNum==1){
@@ -208,13 +229,15 @@ int main(){
     }
 
     bool gamestate = true;
+    bool turnloop = true;
     int i = 0;
     int PlayerTurn = 1;
     int select;
 
 
-    //Main game loop
+    //Main game loop start
     do{
+
         system("cls");
 
         Header(username,symbol); //Display title and players
@@ -243,50 +266,34 @@ int main(){
                 cout << "IT'S A DRAW!!! >:O";
                 cout<<"\n+----------------------------------+\n";
             }
-            getch();
 
             gamestate = false;
-
         }
         else if (PlayerTurn == 1){
 
             do{
+                turnloop = true;
                 cout<<"\n+----------------------------------+\n\n";
                 cout << " Player X's turn (Select 1 - 9): ";
                 cin >> select;
 
-                if (isMoveValid(select, 'x')){ // Checks if slot is occupied
-                    break;
-                }
-                else
-                    system("cls");
-                    Header(username,symbol);
-                    DrawGrid();
-                    cout << "\n Uh-oh! That slot is occupied. (._.;)" << endl;
+                turnloop = InputCheck(select, 'x');
 
-
-            }while(true);
+            }while(turnloop);
 
             PlayerTurn = 2;
         }
         else{
 
             do{
+                turnloop = true;
                 cout<<"\n+----------------------------------+\n\n";
                 cout << " Player O's turn (Select 1 - 9): ";
                 cin >> select;
 
-                if (isMoveValid(select, 'o')){
-                    break;
-                }
-                else
-                    system("cls");
-                    Header(username,symbol);
-                    DrawGrid();
-                    cout << "\n Uh-oh! That slot is occupied. (._.;)" << endl;
+                turnloop = InputCheck(select, 'o');
 
-
-            }while(true);
+            }while(turnloop);
 
             PlayerTurn = 1;
         }
@@ -295,9 +302,11 @@ int main(){
 
     }while(gamestate == true);
 
+    //Main game loop end
+
     //Rematch
-    cout << "\n Would you like to have a rematch?\n ";
-    cin>>rematch;
+    cout << "\n Would you like to have a rematch? (Y/N) \n ";
+        cin>>rematch;
 
         if (rematch=='N'||rematch=='n'){
             system("cls");
@@ -311,7 +320,6 @@ int main(){
                 cout<<"\n Would you like to have a rematch? (Y/N)\n ";
                 cin>>rematch;
                 if ((rematch == 'N')||(rematch == 'n')){
-                    system("cls");
                     cout<<"\n+-------------------------------------------------+\n";
                     cout<<" Come back when you want to play again! :D";
                     cout<<"\n+-------------------------------------------------+\n";
@@ -335,4 +343,3 @@ int main(){
     return 0;
 
 }
-
