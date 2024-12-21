@@ -154,6 +154,7 @@ int main(){
 
     //Main game loop
     do{
+        system("cls");
 
         // Draws grid and elements
         DrawGrid();
@@ -173,7 +174,7 @@ int main(){
             else{
                 cout << "Draw!";
             }
-            getch();
+
 
             gamestate = false;
         }
@@ -215,8 +216,6 @@ int main(){
 
             PlayerTurn = 1;
         }
-
-        system("cls");
 
         i++;
 
