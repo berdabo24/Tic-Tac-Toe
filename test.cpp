@@ -180,7 +180,7 @@ int main(){
     cout<<" Hello, user! Welcome to >>>Tic-Tac-Toe<<< ! OvO\n";
 
     int p=0;
-    char confirm;
+    string confirm;
     while(p<PLAYERS){
         cout<<"+-------------------------------------------------+\n";
         cout<<"\n What's Player "<<p+1<<"'s name? \n ";
@@ -189,20 +189,21 @@ int main(){
         cout<<" Player "<<p+1<<"'s name is "<<username[p]<<"? (Y/N)\n ";
         cin>>confirm;
         cin.ignore();
-        if ((confirm == 'Y')||(confirm == 'y')){
+        if ((confirm == "Y")||(confirm == "y")){
             p++;
         }
-        else if ((confirm == 'N')||(confirm == 'n')){}
+        else if ((confirm == "N")||(confirm == "n")){}
         else{
-            while ((confirm != 'Y')&&(confirm != 'y')&&(confirm != 'N')&&(confirm != 'n')){
-                cout<<"Invalid input. Please try again. ;-;";
+            while ((confirm != "Y")&&(confirm != "y")&&(confirm != "N")&&(confirm != "n")){
+                cout<<"\n Invalid input. Please try again. ;-;";
                 cout<<"\n Your name is "<<username[p]<<"? (Y/N)\n ";
                 cin>>confirm;
+                cin.ignore();
             }
-            if ((confirm == 'Y')||(confirm == 'y')){
+            if ((confirm == "Y")||(confirm == "y")){
                 p++;
             }
-            else if ((confirm == 'N')||(confirm == 'n')){}
+            else if ((confirm == "N")||(confirm == "n")){}
         }
     }
 
