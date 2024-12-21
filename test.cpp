@@ -14,7 +14,7 @@ string username[PLAYERS];
 char rematch;
 
 
-void Header(string username[], string symbol[]){
+void Header(string username[], char symbol[]){
     cout<<"+----------------------------------+\n";
     cout<<" \t     Tic-Tac-Toe\n";
     cout<<"+----------------------------------+\n\n";
@@ -155,6 +155,7 @@ int main(){
     cout<<"+-------------------------------------------------+\n";
     cout<<" Hello, user! Welcome to >>>Tic-Tac-Toe<<< ! OvO\n";
 
+    //Enter username of players
     int p=0;
     char confirm;
     while(p<PLAYERS){
@@ -171,7 +172,7 @@ int main(){
         else if ((confirm == 'N')||(confirm == 'n')){}
         else{
             while ((confirm != 'Y')&&(confirm != 'y')&&(confirm != 'N')&&(confirm != 'n')){
-                cout<<"Invalid input. Please try again. ;-;";
+                cout<<"\n Invalid input. Please try again. ;-;\n";
                 cout<<" Your name is "<<username[p]<<"? (Y/N)\n ";
                 cin>>confirm;
             }
@@ -184,7 +185,7 @@ int main(){
 
     do{
         system("cls");
-        string symbol[PLAYERS];
+        char symbol[PLAYERS];
 
 
         int randomNum = rand() % 2; // X(1)/O(0) for Player 1
@@ -214,6 +215,7 @@ int main(){
 
     //Main game loop
     do{
+        system("cls");
 
         Header(username,symbol); //Display title and players
 
@@ -228,12 +230,12 @@ int main(){
         if (i == 9 || CheckWinCond(SLOT_X) == true || CheckWinCond(SLOT_O) == true){
             if (CheckWinCond(SLOT_X)){
                 cout<<"\n+----------------------------------+\n";
-                cout << " YAY! X won! *v*";
+                cout << " YAYYYYYYYYY! X won! *v*";
                 cout<<"\n+----------------------------------+\n";
             }
             else if (CheckWinCond(SLOT_O)){
                 cout<<"\n+----------------------------------+\n";
-                cout << " WOW! O won! *v*";
+                cout << " WOWWY WOW WOW! O won! *v*";
                 cout<<"\n+----------------------------------+\n";
             }
             else{
@@ -244,11 +246,12 @@ int main(){
             getch();
 
             gamestate = false;
+
         }
         else if (PlayerTurn == 1){
 
             do{
-                cout<<"\n+----------------------------------+\n";
+                cout<<"\n+----------------------------------+\n\n";
                 cout << " Player X's turn (Select 1 - 9): ";
                 cin >> select;
 
@@ -257,6 +260,7 @@ int main(){
                 }
                 else
                     system("cls");
+                    Header(username,symbol);
                     DrawGrid();
                     cout << "\n Uh-oh! That slot is occupied. (._.;)" << endl;
 
@@ -277,6 +281,7 @@ int main(){
                 }
                 else
                     system("cls");
+                    Header(username,symbol);
                     DrawGrid();
                     cout << "\n Uh-oh! That slot is occupied. (._.;)" << endl;
 
@@ -286,19 +291,16 @@ int main(){
             PlayerTurn = 1;
         }
 
-        system("cls");
-
         i++;
-
-
-
 
     }while(gamestate == true);
 
+    //Rematch
     cout << "\n Would you like to have a rematch?\n ";
-        cin>>rematch;
+    cin>>rematch;
 
         if (rematch=='N'||rematch=='n'){
+            system("cls");
             cout<<"\n+-------------------------------------------------+\n";
             cout<<" Come back when you want to play again! :D";
             cout<<"\n+-------------------------------------------------+\n";
@@ -309,11 +311,22 @@ int main(){
                 cout<<"\n Would you like to have a rematch? (Y/N)\n ";
                 cin>>rematch;
                 if ((rematch == 'N')||(rematch == 'n')){
+                    system("cls");
                     cout<<"\n+-------------------------------------------------+\n";
                     cout<<" Come back when you want to play again! :D";
                     cout<<"\n+-------------------------------------------------+\n";
                 }
             }while ((rematch != 'Y')&&(rematch != 'y')&&(rematch != 'N')&&(rematch != 'n'));
+        }
+        else{
+
+            //Reset Game values
+            gamestate = true;
+            i = 0;
+            for (i = 1; i <= SLOTSIZE; i++){
+                SLOT_O[i] = 0;
+                SLOT_X[i] = 0;
+            }
         }
     }while (rematch=='Y'||rematch=='y');
 
