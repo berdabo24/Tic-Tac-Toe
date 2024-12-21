@@ -186,7 +186,7 @@ int main(){
         cout<<"\n What's Player "<<p+1<<"'s name? \n ";
         getline(cin, username[p]);
         cout<<"\n+-------------------------------------------------+\n\n";
-        cout<<" Player "<<p+1<<"'s name is "<<username[p]<<"? (Y/N)\n ";
+        cout<<" Is Player "<<p+1<<"'s name"<<username[p]<<"? (Y/N)\n ";
         cin>>confirm;
         cin.ignore();
         if ((confirm == "Y")||(confirm == "y")){
@@ -195,8 +195,8 @@ int main(){
         else if ((confirm == "N")||(confirm == "n")){}
         else{
             while ((confirm != "Y")&&(confirm != "y")&&(confirm != "N")&&(confirm != "n")){
-                cout<<"\n Invalid input. Please try again. ;-;";
-                cout<<"\n Your name is "<<username[p]<<"? (Y/N)\n ";
+                cout<<"\n Invalid input. Please try again. ;-;"<< endl;
+                cout<<"\n Is Player"<<p+1<<"'s name"<<username[p]<<"? (Y/N)\n ";
                 cin>>confirm;
                 cin.ignore();
             }
