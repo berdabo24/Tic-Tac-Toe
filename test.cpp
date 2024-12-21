@@ -5,6 +5,11 @@
 
 using namespace std;
 
+//GLOBAL VARIABLES
+const int SLOTSIZE = 9;
+char SLOT[SLOTSIZE]; // 9 slots including 0
+int ACTIVESLOT[SLOTSIZE] = {0};
+
 void GridRows(char a,char b,char c){
     //Row 1
 
@@ -33,9 +38,6 @@ void GridRows(char a,char b,char c){
                 cout << " " << "|";
             }
 
-            if (row == 2 && column == 2){
-
-            }
 
         }
         cout << endl;
@@ -54,12 +56,29 @@ void lineSeg(){
 
 }
 
+bool isMoveValid(int input, char turn){
+
+    if (ACTIVESLOT[input] == 0){
+        SLOT[input] = turn;
+        ACTIVESLOT[input] = 1;
+        return true;
+    }
+    else
+        return false;
+
+}
+
+void DrawGrid(){
+    GridRows(SLOT[1],SLOT[2],SLOT[3]);
+    lineSeg();
+    GridRows(SLOT[4],SLOT[5],SLOT[6]);
+    lineSeg();
+    GridRows(SLOT[7],SLOT[8],SLOT[9]);
+}
+
 int main(){
 
-    int SLOTSIZE = 9;
-    char SLOT[SLOTSIZE - 1]; // 9 slots including 0
-
-    for (int i = 0; i < SLOTSIZE; i++){
+    for (int i = 1; i <= SLOTSIZE; i++){
         SLOT[i] = ' ';
     }
 
@@ -72,11 +91,8 @@ int main(){
     do{
 
         // Draws grid and elements
-        GridRows(SLOT[0],SLOT[1],SLOT[2]);
-        lineSeg();
-        GridRows(SLOT[3],SLOT[4],SLOT[5]);
-        lineSeg();
-        GridRows(SLOT[6],SLOT[7],SLOT[8]);
+        DrawGrid();
+
 
 
         cout << endl;
@@ -90,19 +106,39 @@ int main(){
         }
         else if (PlayerTurn == 1){
 
-            cout << "Player X's turn (Select 1 - 9): ";
-            cin >> select;
+            do{
+                cout << "Player X's turn (Select 1 - 9): ";
+                cin >> select;
 
-            SLOT[select - 1] = 'x';
+                if (isMoveValid(select, 'x')){ // Checks if slot is occupied
+                    break;
+                }
+                else
+                    system("cls");
+                    DrawGrid();
+                    cout << "Slot occupied" << endl;
+
+
+            }while(true);
 
             PlayerTurn = 2;
         }
         else{
 
-            cout << "Player O's turn (Select 1 - 9): ";
-            cin >> select;
+            do{
+                cout << "Player O's turn (Select 1 - 9): ";
+                cin >> select;
 
-            SLOT[select - 1] = 'o';
+                if (isMoveValid(select, 'o')){
+                    break;
+                }
+                else
+                    system("cls");
+                    DrawGrid();
+                    cout << "Slot occupied" << endl;
+
+
+            }while(true);
 
             PlayerTurn = 1;
         }
