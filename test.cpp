@@ -7,8 +7,9 @@ using namespace std;
 
 //GLOBAL VARIABLES
 const int SLOTSIZE = 9;
-char SLOT[SLOTSIZE]; // 9 slots including 0
-int ACTIVESLOT[SLOTSIZE] = {0};
+char DRAW_SLOT[SLOTSIZE]; // 9 slots including 0
+int SLOT_X[SLOTSIZE] = {0};
+int SLOT_O[SLOTSIZE] = {0};
 
 void GridRows(char a,char b,char c){
     //Row 1
@@ -18,7 +19,7 @@ void GridRows(char a,char b,char c){
         for (int column = 1; column < 10; column++){
 
 
-            // Middle row holes
+            // row middle holes
             if (row == 2 && column == 2){
                 cout << " " << a;
             }
@@ -37,7 +38,6 @@ void GridRows(char a,char b,char c){
             {
                 cout << " " << "|";
             }
-
 
         }
         cout << endl;
@@ -58,9 +58,14 @@ void lineSeg(){
 
 bool isMoveValid(int input, char turn){
 
-    if (ACTIVESLOT[input] == 0){
-        SLOT[input] = turn;
-        ACTIVESLOT[input] = 1;
+    if (SLOT_X[input] == 0 && SLOT_O[input] != 1 && turn == 'x'){
+        DRAW_SLOT[input] = turn;
+        SLOT_X[input] = 1;
+        return true;
+    }
+    else if (SLOT_O[input] == 0 && SLOT_X[input] != 1 && turn == 'o'){
+        DRAW_SLOT[input] = turn;
+        SLOT_O[input] = 1;
         return true;
     }
     else
@@ -69,17 +74,76 @@ bool isMoveValid(int input, char turn){
 }
 
 void DrawGrid(){
-    GridRows(SLOT[1],SLOT[2],SLOT[3]);
+    GridRows(DRAW_SLOT[1],DRAW_SLOT[2],DRAW_SLOT[3]);
     lineSeg();
-    GridRows(SLOT[4],SLOT[5],SLOT[6]);
+    GridRows(DRAW_SLOT[4],DRAW_SLOT[5],DRAW_SLOT[6]);
     lineSeg();
-    GridRows(SLOT[7],SLOT[8],SLOT[9]);
+    GridRows(DRAW_SLOT[7],DRAW_SLOT[8],DRAW_SLOT[9]);
+}
+
+bool CheckWinCond(int ary[]){
+
+    if (
+        /*
+        1 0 0
+        0 1 0
+        0 0 1
+        */
+        (ary[1] == 1 && ary[5] == 1 && ary[9] == 1) ||
+        /*
+        0 0 1
+        0 1 0
+        1 0 0
+        */
+        (ary[3] == 1 && ary[5] == 1 && ary[7] == 1) ||
+        /*
+        1 1 1
+        0 0 0
+        0 0 0
+        */
+        (ary[1] == 1 && ary[2] == 1 && ary[3] == 1) ||
+        /*
+        0 0 0
+        1 1 1
+        0 0 0
+        */
+        (ary[4] == 1 && ary[5] == 1 && ary[6] == 1) ||
+        /*
+        0 0 0
+        0 0 0
+        1 1 1
+        */
+        (ary[7] == 1 && ary[8] == 1 && ary[9] == 1) ||
+        /*
+        1 0 0
+        1 0 0
+        1 0 0
+        */
+        (ary[1] == 1 && ary[4] == 1 && ary[7] == 1) ||
+        /*
+        0 1 0
+        0 1 0
+        0 1 0
+        */
+        (ary[2] == 1 && ary[5] == 1 && ary[8] == 1) ||
+        /*
+        0 0 1
+        0 0 1
+        0 0 1
+        */
+        (ary[3] == 1 && ary[6] == 1 && ary[9] == 1)
+        ){
+            return true;
+        }
+    else
+        return false;
+
 }
 
 int main(){
 
     for (int i = 1; i <= SLOTSIZE; i++){
-        SLOT[i] = ' ';
+        DRAW_SLOT[i] = ' ';
     }
 
     bool gamestate = true;
@@ -87,19 +151,28 @@ int main(){
     int PlayerTurn = 1;
     int select;
 
+
     //Main game loop
     do{
 
         // Draws grid and elements
         DrawGrid();
 
-
-
         cout << endl;
 
         //Ask for user input
-         if (i == 9){
-            cout << "Press enter to continue: ";
+
+
+        if (i == 9 || CheckWinCond(SLOT_X) == true || CheckWinCond(SLOT_O) == true){
+            if (CheckWinCond(SLOT_X)){
+                cout << "X won!";
+            }
+            else if (CheckWinCond(SLOT_O)){
+                cout << "O won!";
+            }
+            else{
+                cout << "Draw!";
+            }
             getch();
 
             gamestate = false;
@@ -146,6 +219,9 @@ int main(){
         system("cls");
 
         i++;
+
+
+
 
     }while(gamestate == true);
 
