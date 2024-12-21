@@ -91,6 +91,39 @@ void DrawGrid(){
     GridRows(DRAW_SLOT[7],DRAW_SLOT[8],DRAW_SLOT[9]);
 }
 
+void WaitForEnter() {
+    cout << "\nPress Enter to clear the screen...";
+    cin.get();    // Captures the Enter key press
+    system("cls");
+}
+
+void guide() {
+    int number = 1;
+
+    cout<<"\n+----------------------------------+\n";
+    cout<<" \t Guide to Tic-Tac-Toe\n";
+    cout<<"+----------------------------------+\n\n";
+
+    for (int row = 1; row <= 3; row++) { // Iterate over rows
+
+        // row with numbers
+        cout << "    " << "    |   " << "    |   \n";
+        cout << "    " << number++ << "   |   " << number++ << "   |   " << number++ << "   \n";
+        cout << "    " << "    |   " << "    |   \n";
+
+        if (row<3) {
+        // bottom border of the cells
+        cout << "  ----- + ----- + -----  \n";
+        }
+    }
+
+    cout << "\nRules: \n1. The first person who gets 3 Xs or 3 Os in a row wins!";
+    cout << "\n2. Please enter the numbers (1-9) stated if you want to choose that slot. \n";
+
+    WaitForEnter();
+
+}
+
 bool CheckWinCond(int ary[]){
 
     if (
@@ -206,6 +239,9 @@ int main(){
             else if ((confirm == "N")||(confirm == "n")){}
         }
     }
+
+    system("cls");
+    guide();
 
     do{
         system("cls");
