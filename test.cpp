@@ -81,6 +81,28 @@ void DrawGrid(){
     GridRows(DRAW_SLOT[7],DRAW_SLOT[8],DRAW_SLOT[9]);
 }
 
+bool InputCheck(int inp, char turn){ // Checks if user input is valid
+
+    if (inp < 1 || inp > 9 || cin.fail()){ // checks if the user input is out of range or wrong datatype
+        cin.clear();
+        cin.ignore();
+        system("cls");
+        DrawGrid();
+        cout << "Invalid input" << endl;
+        return true;
+    }
+    else if (isMoveValid(inp, turn)){
+        return false;
+    }
+    else{
+        system("cls");
+        DrawGrid();
+        cout << "Slot occupied" << endl;
+        return true;
+    }
+
+}
+
 bool CheckWinCond(int ary[]){
 
     if (
@@ -140,16 +162,17 @@ bool CheckWinCond(int ary[]){
 
 }
 
-int main(){
-
+void MainGameLoop(){
     for (int i = 1; i <= SLOTSIZE; i++){
         DRAW_SLOT[i] = ' ';
     }
 
     bool gamestate = true;
+    bool turnloop = true;
     int i = 0;
     int PlayerTurn = 1;
     int select;
+
 
 
     //Main game loop
@@ -181,38 +204,27 @@ int main(){
         else if (PlayerTurn == 1){
 
             do{
+                turnloop = true;
                 cout << "Player X's turn (Select 1 - 9): ";
                 cin >> select;
 
-                if (isMoveValid(select, 'x')){ // Checks if slot is occupied
-                    break;
-                }
-                else
-                    system("cls");
-                    DrawGrid();
-                    cout << "Slot occupied" << endl;
+                turnloop = InputCheck(select, 'x');
 
-
-            }while(true);
+            }while(turnloop);
 
             PlayerTurn = 2;
+
         }
         else{
 
             do{
+                turnloop = true;
                 cout << "Player O's turn (Select 1 - 9): ";
                 cin >> select;
 
-                if (isMoveValid(select, 'o')){
-                    break;
-                }
-                else
-                    system("cls");
-                    DrawGrid();
-                    cout << "Slot occupied" << endl;
+                turnloop = InputCheck(select, 'o');
 
-
-            }while(true);
+            }while(turnloop);
 
             PlayerTurn = 1;
         }
@@ -223,6 +235,13 @@ int main(){
 
 
     }while(gamestate == true);
+
+
+}
+
+int main(){
+
+    MainGameLoop();
 
     return 0;
 
