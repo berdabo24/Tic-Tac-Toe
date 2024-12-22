@@ -10,13 +10,13 @@ const int SLOTSIZE = 9, PLAYERS = 2;
 char DRAW_SLOT[SLOTSIZE]; // 9 slots including 0
 int SLOT_X[SLOTSIZE] = {0};
 int SLOT_O[SLOTSIZE] = {0};
-string username[PLAYERS];
-char symbol[PLAYERS], rematch;
+string username[PLAYERS], rematch;
+char symbol[PLAYERS];
 
 
 void Header(string username[], char symbol[]){
     cout<<"+----------------------------------+\n";
-    cout<<" \t     Tic-Tac-Toe\n";
+    cout<<"\t    Tic-Tac-Toe\n";
     cout<<"+----------------------------------+\n\n";
     cout<<" "<<username[0]<<" {"<<symbol[0]<<"}"<<"\t\t"<<username[1]<<" {"<<symbol[1]<<"}"<<endl<<endl;
 }
@@ -101,7 +101,7 @@ void guide() {
     int number = 1;
 
     cout<<"\n+----------------------------------+\n";
-    cout<<" \t Guide to Tic-Tac-Toe\n";
+    cout<<"\tGuide to Tic-Tac-Toe \n";
     cout<<"+----------------------------------+\n\n";
 
     for (int row = 1; row <= 3; row++) { // Iterate over rows
@@ -219,24 +219,24 @@ int main(){
         cout<<"\n What's Player "<<p+1<<"'s name? \n ";
         getline(cin, username[p]);
         cout<<"\n+-------------------------------------------------+\n\n";
-        cout<<" Is Player "<<p+1<<"'s name"<<username[p]<<"? (Y/N)\n ";
+        cout<<" Player"<<p+1<<"'s name is "<<username[p]<<". \n Is this correct? (Y/N)\n ";
         cin>>confirm;
         cin.ignore();
-        if ((confirm == "Y")||(confirm == "y")){
+        if ((confirm == "Y")||(confirm == "y")||(confirm == "Yes")||(confirm == "yes")){
             p++;
         }
-        else if ((confirm == "N")||(confirm == "n")){}
+        else if ((confirm == "N")||(confirm == "n")||(confirm == "No")||(confirm == "no")){}
         else{
-            while ((confirm != "Y")&&(confirm != "y")&&(confirm != "N")&&(confirm != "n")){
+            while ((confirm != "Y")&&(confirm != "y")&&(confirm != "Yes")&&(confirm != "yes")&&(confirm != "N")&&(confirm != "n")&&(confirm != "No")&&(confirm != "no")){
                 cout<<"\n Invalid input. Please try again. ;-;"<< endl;
-                cout<<"\n Is Player"<<p+1<<"'s name"<<username[p]<<"? (Y/N)\n ";
+                cout<<"\n Player"<<p+1<<"'s name is "<<username[p]<<". \n Is this correct? (Y/N)\n ";
                 cin>>confirm;
                 cin.ignore();
             }
-            if ((confirm == "Y")||(confirm == "y")){
+            if ((confirm == "Y")||(confirm == "y")||(confirm == "Yes")||(confirm == "yes")){
                 p++;
             }
-            else if ((confirm == "N")||(confirm == "n")){}
+            else if ((confirm == "N")||(confirm == "n")||(confirm == "No")||(confirm == "no")){}
         }
     }
 
@@ -288,15 +288,29 @@ int main(){
 
 
         if (i == 9 || CheckWinCond(SLOT_X) == true || CheckWinCond(SLOT_O) == true){
-            if (CheckWinCond(SLOT_X)){
-                cout<<"\n+----------------------------------+\n";
-                cout << " YAYYYYYYYYY! X won! *v*";
-                cout<<"\n+----------------------------------+\n";
+           if (CheckWinCond(SLOT_X)){
+                if (symbol[0]=='X'){
+                    cout<<"\n+----------------------------------+\n";
+                    cout << " YAYYYYYYYYY! " << username[0] << " won! *v*";
+                    cout<<"\n+----------------------------------+\n";
+                }
+                if (symbol[1]=='X'){
+                    cout<<"\n+----------------------------------+\n";
+                    cout << " YAYYYYYYYYY! " << username[1] << " won! *v*";
+                    cout<<"\n+----------------------------------+\n";
+                }
             }
             else if (CheckWinCond(SLOT_O)){
-                cout<<"\n+----------------------------------+\n";
-                cout << " WOWWY WOW WOW! O won! *v*";
-                cout<<"\n+----------------------------------+\n";
+                if (symbol[0]=='O'){
+                    cout<<"\n+----------------------------------+\n";
+                    cout << " WOWWY WOW WOW! " << username[0] << " won! *v*";
+                    cout<<"\n+----------------------------------+\n";
+                }
+                if (symbol[1]=='O'){
+                    cout<<"\n+----------------------------------+\n";
+                    cout << " WOWWY WOW WOW! " << username[1] << " won! *v*";
+                    cout<<"\n+----------------------------------+\n";
+                }
             }
             else{
                 cout<<"\n+----------------------------------+\n";
@@ -345,23 +359,35 @@ int main(){
     cout << "\n Would you like to have a rematch? (Y/N) \n ";
         cin>>rematch;
 
-        if (rematch=='N'||rematch=='n'){
+        if (rematch=="N"||rematch=="n"||rematch=="No"||rematch=="no"){
             system("cls");
             cout<<"\n+-------------------------------------------------+\n";
             cout<<" Come back when you want to play again! :D";
             cout<<"\n+-------------------------------------------------+\n";
         }
-        else if ((rematch != 'Y')&&(rematch != 'y')&&(rematch != 'N')&&(rematch != 'n')){
+        else if ((rematch != "Y")&&(rematch != "y")&&(rematch != "Yes")&&(rematch != "yes")&&(rematch != "N")&&(rematch != "n")&&(rematch != "No")&&(rematch != "no")){
             do{
                 cout<<"\n Oops! It was meant to be a 'Yes' or 'No' question. =v=;";
                 cout<<"\n Would you like to have a rematch? (Y/N)\n ";
                 cin>>rematch;
-                if ((rematch == 'N')||(rematch == 'n')){
+                if ((rematch == "N")||(rematch == "n")||(rematch == "No")||(rematch == "no")){
+                    system("cls");
                     cout<<"\n+-------------------------------------------------+\n";
                     cout<<" Come back when you want to play again! :D";
                     cout<<"\n+-------------------------------------------------+\n";
                 }
-            }while ((rematch != 'Y')&&(rematch != 'y')&&(rematch != 'N')&&(rematch != 'n'));
+                else{
+
+                    //Reset Game values
+                    gamestate = true;
+                    i = 0;
+                    for (i = 1; i <= SLOTSIZE; i++){
+                        SLOT_O[i] = 0;
+                        SLOT_X[i] = 0;
+                    }
+                }
+
+            }while ((rematch != "Y")&&(rematch != "y")&&(rematch != "Yes")&&(rematch != "yes")&&(rematch != "N")&&(rematch != "n")&&(rematch != "No")&&(rematch != "no"));
         }
         else{
 
@@ -373,7 +399,7 @@ int main(){
                 SLOT_X[i] = 0;
             }
         }
-    }while (rematch=='Y'||rematch=='y');
+    }while (rematch=="Y"||rematch=="y"||rematch=="Yes"||rematch=="yes");
 
 
 
